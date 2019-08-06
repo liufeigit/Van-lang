@@ -67,7 +67,7 @@ email: [woaicplusplus@gmail.com](mailto:woaicplusplus@gmail.com) or [18510248500
 ### License
 ---
 MIT License
-> Copyright (c) 2019 liufei and `Van`project contributors
+> Copyright (c) 2019 liufei and `Van` project contributors
 >
 >  Permission is hereby granted, free of charge, to any person obtaining a copy
 >  of this software and associated documentation files (the "Software"), to deal
