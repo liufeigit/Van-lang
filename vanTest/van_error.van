@@ -1,0 +1,70 @@
+
+
+# test error
+
+
+def fn1(value){
+	sum=0;
+
+	for(e in [1,2,3,4,5,6,7,8,9]){
+		print e;
+
+		if(e<value){
+			continue;
+		}
+
+		sum=sum+e;
+	}
+
+	print sum;
+
+}
+
+fn1(5);
+
+a=1;
+b=2;
+print -(-a+b);
+
+class A{
+	def fn1(){
+		print 1;
+		return 1;
+	}
+
+	def fn2(){
+		print 2;
+		return 2;
+	}
+
+	def fn3(){
+		print 3;
+		return 3;
+	}
+}
+
+obj1=new A;
+
+print obj1.fn1()+(obj1.fn3()+obj1.fn2());
+
+
+arr1=[];
+
+arr1.push(1);
+print arr1;
+
+arr1.pop();
+print arr1;
+
+arr2=new List(0);
+print arr2;
+print arr1.length();
+
+
+
+
+
+
+
+
+

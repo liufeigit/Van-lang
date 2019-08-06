@@ -1,0 +1,33 @@
+# class Test
+
+class A{
+	field x,y;
+
+	def fn1(x){
+		self.x=x;
+		print "A:fn1 ",self.x;
+	}
+}
+
+class B(A){
+	field x,z;
+
+	def fn1(x){
+		self.x=x;
+		super.fn1(x+3);
+		# super.x
+		print "B:fn1 ",self.x;
+	}
+}
+
+obj1=new B();
+
+obj1.fn1(3);
+
+obj1.y=3;
+print obj1.y;
+
+
+a={a:1,obj:new B};
+a["001"]="123";
+print a;

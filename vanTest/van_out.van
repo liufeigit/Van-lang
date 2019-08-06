@@ -1,0 +1,33 @@
+
+a=1;
+c=2;
+
+def fn1(a,out b){
+	b=b+a;
+
+	return b;
+}
+
+
+d=fn1(a,out c);
+
+print d," ",a," ",c;
+
+a1={a:1};
+a2={a:1};
+
+def fn1(a,out b){
+	a={d:1};
+
+	b={c:1};
+
+	return a;
+}
+
+c1=fn1(a1,out a2);
+
+print c1;
+
+print a1;
+print a2;
+

@@ -1,0 +1,73 @@
+# assign
+# test assign/for/scope
+
+a=1;
+b=2;
+print a,b;
+
+a,b=b,a;
+
+
+print a,b;
+
+for(i,j=0,1,2;;;i<10;;;i,j=i+1,j+2;;){
+	print i,"----",j;
+}
+
+for(e1,e2 in [1,2,3,4],[5,6,7,8]){
+	print e1+e2;
+}
+
+
+def fn1(a){
+	
+	return def {
+		print a;
+
+		a=a+1;
+		up a;
+		print a;
+	};
+}
+
+f1=fn1(1);
+f2=fn1(100);
+
+print "------";
+
+f1();
+f2();
+
+f1();
+f2();
+
+def fn1(a,b){
+	a=a+1;
+	b=a+b;
+	return a;
+}
+
+
+a=1;
+c=2;
+
+a1=fn1(a,c);
+print a1," ",a," ",c;
+
+def fn1(a,out b){
+	b=b+a;
+
+	return b;
+}
+
+
+d=fn1(a,out c);
+
+print d," ",a," ",c;
+
+
+
+
+
+
+

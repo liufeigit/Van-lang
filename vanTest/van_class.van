@@ -1,0 +1,63 @@
+
+# class test
+
+class A{
+	field x;
+	static field y;
+
+	def _fn1(x){
+		self.x=x;
+	}
+
+	def fn1(x){
+		self._fn1(x);
+		super._fn1(x);
+		print self.x," ",super.x;
+		print "A:ins:fn1";
+	}
+
+	static def fn1(a){
+		
+		self.y="y=>class A";
+		print self.y;
+		a=a-1;
+		if(a>0){
+			super.fn1(a);
+		}
+	}
+
+}
+
+class B(A){
+	field x,y,z;
+	static field y,z;
+
+	def fn1(x){
+		super.fn1(x);
+		self.x=x+100;
+		print self.x;
+	}
+
+	static def fn1(a){
+		super.fn1(a);
+		self.y="y=>class B";
+
+		print self;
+		print self.y;
+		print super.y;
+	}
+}
+
+obj1=new A;
+obj2=new A;
+
+c1=new B;
+c2=new B;
+
+B.fn1(5);
+print "-----";
+print A.y;
+print B.y;
+
+
+

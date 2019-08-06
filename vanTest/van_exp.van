@@ -1,0 +1,69 @@
+
+# number/string/null/false/true
+a=1;
+b=2;
+c=3;
+
+print a%b||c;
+print a/b&&c;
+
+# list 
+arr1=new List(4);
+arr2=[1,[],{a:1},def (a){print a;}];
+
+arr2[3](arr2[0]);
+
+# map 
+dict1=new Map;
+dict2={
+	a:1,
+	b:def (a){
+		print a;
+	},
+	c:[1,2,3]
+};
+
+dict1.a1=123;
+dict1["a2"]=456;
+
+dict2.b(dict2.a);
+print dict1.a1;
+
+# function
+def fn1(a,arr){
+	sum=0;
+	for(v in arr){
+		sum=sum+v*a;
+	}
+
+	return sum;
+}
+
+a=fn1(3,[1,2,3]);
+print a;
+
+# class
+class A{
+	field name,number;
+	field dict;
+	field arr;
+
+	def fn1(){
+
+	}
+
+	def fn2(){
+
+	}
+}
+
+obj=new A;
+
+obj.fn1();
+obj.fn2();
+
+obj.arr=[1,"job",[obj],{a:1}];
+print obj.arr;
+
+
+

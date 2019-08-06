@@ -1,0 +1,28 @@
+
+
+# test function
+
+def func1(a){
+	
+	return def (){
+		up a;
+		a=a+1;
+		print a;
+		return a;
+	};
+}
+
+
+f1=func1(2);
+f2=func1(100);
+f1();
+f2();
+f1();
+f2();
+
+
+a={a:{a:{a:{a:{}}}}};
+a.a.a.a.a.c=1;
+print a.a.a.a.a.c;
+
+
