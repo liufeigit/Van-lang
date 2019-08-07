@@ -44,13 +44,18 @@ void execStr(char *data){
 
 	int length=0;
 	Token *token=NULL;
+	Token *token1=NULL;
 	ASTNode *node=NULL;
 
 	length=strlen(data);
-	lexStr(data, &token);
+	lexStr(data, &token,&token1);
 	env=environ_create();
 	if(token){
+
+		// lexDebug(token);
+
 		parseToken(token,&node);
+
 		environ_eval(env,node);
 	}
 

@@ -45,10 +45,9 @@ static int __isFalse(char *str,int cur);
 static int __isNull(char *str,int cur);
 
 static int __isDigit(char *str,int cur);
-
 static int __isDotDigit(char *str,int cur);
 
-int lexStr(char *str,Token **token){
+int lexStr(char *str,Token **headToken,Token **tailToken){
 	int offset=0;
 	int end=0;
 	Token *head=NULL;
@@ -93,15 +92,19 @@ int lexStr(char *str,Token **token){
 					curToken=_token;
 				}
 			}
+			else{
+				freeToken(_token);
+			}
 		}
 		else{ // error处理
 			printf(">>> throw LexError: line %d, column %d\n",__lex_curRow+1,__lex_curCol+1);
-			// exit(0);
+			
+			freeToken(_token);
+			freeToken(curToken);
 
 			offset=0;
 			break;
 		}
-		
 	}
 
 	if(offset){
@@ -114,15 +117,19 @@ int lexStr(char *str,Token **token){
 		curToken->next=tail;
 		tail->pre=curToken;
 
-		*token=head;
+		if(tailToken){
+			*tailToken=tail;
+		}
+		if(headToken){
+			*headToken=head;
+		}
+
+		if(!headToken&&!tailToken){
+			freeToken(tail);
+		}
 	}
 
 	return offset;
-}
-
-void lexDebug(Token *token){
-
-
 }
 
 static int lexFilterWs(char *str,int cur){
@@ -1254,7 +1261,42 @@ static int __isNull(char *str,int cur){
 	return offset;
 }
 
+void __freeHeadToken(Token *token){
 
+	if(token){
+		free(token->data);
+		__freeHeadToken(token->next);
+		free(token);
+	}
+}
+
+void __freeTailToken(Token *token){
+	Token *_token=NULL;
+
+	while(token){
+		_token=token->pre;
+
+		free(token->data);
+		free(token);
+		token=_token;
+	}
+}
+
+void freeToken(Token *token){
+	
+	if(token){
+		if(token->pre){
+			__freeTailToken(token);
+		}
+		else if(token->next){
+			__freeHeadToken(token);
+		}
+		else{
+			free(token->data);
+			free(token);
+		}
+	}
+}
 
 
 
