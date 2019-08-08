@@ -2,8 +2,8 @@
 
 #include "van_lex.h"
 
-void lexDebug(Token *token){
-	printf(">>> lexDebug start:\n");
+void debugToken(Token *token){
+	printf(">>> tokenDebug start:\n");
 
 	while(token){
 		printf(">>> %d:%d=",token->row+1,token->column+1);
@@ -270,7 +270,7 @@ void lexDebug(Token *token){
 		token=token->next;
 	}
 
-	printf(">>> lexDebug end\n");
+	printf(">>> tokenDebug end\n");
 }
 
 

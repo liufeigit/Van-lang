@@ -205,7 +205,9 @@ void astNode_vist(ASTNode *node,VistHandler handler){
 
 }
 
-
+void astNode_free(ASTNode *node){
+	
+}
 
 
 

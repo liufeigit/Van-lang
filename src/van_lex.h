@@ -27,8 +27,9 @@ typedef struct Token{
 } Token;
 
 int lexStr(char *str,Token **headToken,Token **tailToken);
+
 void freeToken(Token *token);
-void lexDebug(Token *token);
+void debugToken(Token *token);
 
 // van_error 相关
 typedef struct ErrorInfor{

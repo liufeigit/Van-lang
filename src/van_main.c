@@ -52,12 +52,16 @@ void execStr(char *data){
 	env=environ_create();
 	if(token){
 
-		// lexDebug(token);
+		// tokenDebug(token);
 
 		parseToken(token,&node);
+
+		// debugASTNode(node);
 
 		environ_eval(env,node);
 	}
 
 }
+
+
 
