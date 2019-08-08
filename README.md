@@ -1,4 +1,6 @@
 # Van
+Embeddable scripting language in C.
+
 A simple and efficient script language.
 
 ### Overview
