@@ -1,7 +1,7 @@
 # Van
-*`Embeddable`* script language in C.
+Embeddable and extend script language in C.
 
-A *`functional-programming`* and *`object-oriented-programming`* script language.
+A **functional-programming** and **object-oriented-programming** script language.
 
 A simple and efficient script language.
 
