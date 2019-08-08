@@ -92,6 +92,7 @@ int parseToken(Token *token,ASTNode **node){
 		token=parseState(token,&_cur);
 		if(!_cur){
 			flag=0;
+			freeASTNode(_cur);
 			break;
 		}
 		cur->next=_cur;
@@ -101,6 +102,9 @@ int parseToken(Token *token,ASTNode **node){
 
 	if(flag){
 		*node=head;
+	}
+	else{
+		freeASTNode(head);
 	}
 
 	return status;
@@ -138,6 +142,14 @@ static Token *parseMap(Token *token, ASTNode **node){
 				tail=parsePair(token,split,&elemet);
 				if(!tail){
 					// error_throwError(ErrorType_ExprSyntaxError, token);
+
+					freeASTNode(cur);
+					for(int i=0;i<len;i++){
+						freeASTNode(nodeArr[i]);
+					}
+					free(nodeArr);
+					freeASTNode(elemet);
+
 					return NULL;
 				}
 
@@ -147,6 +159,14 @@ static Token *parseMap(Token *token, ASTNode **node){
 				tail=parsePair(token,end,&elemet);
 				if(!tail){
 					// error_throwError(ErrorType_ExprSyntaxError, token);
+
+					freeASTNode(cur);
+					for(int i=0;i<len;i++){
+						freeASTNode(nodeArr[i]);
+					}
+					free(nodeArr);
+					freeASTNode(elemet);
+
 					return NULL;
 				}
 
@@ -198,6 +218,14 @@ static Token *parseList(Token *token, ASTNode **node){
 				tail=parseExpr(token,split,NULL,&elemet);
 				if(!tail){
 					// error_throwError(ErrorType_ExprSyntaxError, token);
+
+					freeASTNode(cur);
+					for(int i=0;i<len;i++){
+						freeASTNode(nodeArr[i]);
+					}
+					free(nodeArr);
+					freeASTNode(elemet);
+
 					return NULL;
 				}
 
@@ -207,6 +235,14 @@ static Token *parseList(Token *token, ASTNode **node){
 				tail=parseExpr(token,end,NULL,&elemet);
 				if(!tail){
 					// error_throwError(ErrorType_ExprSyntaxError, token);
+
+					freeASTNode(cur);
+					for(int i=0;i<len;i++){
+						freeASTNode(nodeArr[i]);
+					}
+					free(nodeArr);
+					freeASTNode(elemet);
+
 					return NULL;
 				}
 
@@ -256,6 +292,10 @@ static Token *parseFunctionExpr(Token *token,ASTNode **node){
 		end=parseBlock(start, end, &blockNode);
 		if(!end){
 			// error_throwError(ErrorType_ExprSyntaxError, start);
+
+			freeASTNode(functionNode);
+			freeASTNode(blockNode);
+
 			return NULL;
 		}
 
@@ -274,6 +314,10 @@ static Token *parseFunctionExpr(Token *token,ASTNode **node){
 		start=parseArguments(start, &argNode);
 		if(!start){
 			// error_throwError(ErrorType_ExprSyntaxError, _token);
+
+			freeASTNode(functionNode);
+			freeASTNode(argNode);
+
 			return NULL;
 		}
 
@@ -281,6 +325,11 @@ static Token *parseFunctionExpr(Token *token,ASTNode **node){
 			end=parseBlock(start, end, &blockNode);
 			if(!end){
 				// error_throwError(ErrorType_ExprSyntaxError, start);
+
+				freeASTNode(functionNode);
+				freeASTNode(argNode);
+				freeASTNode(blockNode);
+
 				return NULL;
 			}
 
@@ -300,6 +349,10 @@ static Token *parseFunctionExpr(Token *token,ASTNode **node){
 
 	// error_throwError(ErrorType_ExprSyntaxError, error);
 	
+	freeASTNode(functionNode);
+	freeASTNode(argNode);
+	freeASTNode(blockNode);
+
 	return NULL;
 }
 
@@ -338,6 +391,7 @@ static Token *parseClassExpr(Token *token,ASTNode **node){
 			_end=__boundParenth(start);
 			if(!_end){
 				// error_throwError(ErrorType_ExprSyntaxError, start);
+				freeASTNode(classNode);
 				return NULL;
 			}
 
@@ -347,6 +401,10 @@ static Token *parseClassExpr(Token *token,ASTNode **node){
 				start=parseExpr(start->next, _end,NULL,&exprNode);
 				if(!start){
 					// error_throwError(ErrorType_ExprSyntaxError, _token);
+
+					freeASTNode(classNode);
+					freeASTNode(exprNode);
+
 					return NULL;
 				}
 
@@ -362,12 +420,21 @@ static Token *parseClassExpr(Token *token,ASTNode **node){
 			end=__boundBrace(start);
 			if(!end){
 				// error_throwError(ErrorType_ExprSyntaxError, start);
+
+				freeASTNode(classNode);
+				freeASTNode(exprNode);
+
 				return NULL;
 			}
 
 			end=parseBlock(start, end, &blockNode);
 			if(!end){
 				// error_throwError(ErrorType_ExprSyntaxError, start);
+
+				freeASTNode(classNode);
+				freeASTNode(exprNode);
+				freeASTNode(blockNode);
+
 				return NULL;
 			}
 
@@ -388,6 +455,10 @@ static Token *parseClassExpr(Token *token,ASTNode **node){
 	}
 
 	// error_throwError(ErrorType_ExprSyntaxError, error);
+
+	freeASTNode(classNode);
+	freeASTNode(exprNode);
+	freeASTNode(blockNode);
 
 	return NULL;
 }
@@ -488,7 +559,7 @@ static Token *__parseIncompleteExpr(Token *token,Token *terminal,ASTNode *preNod
 	}
 
 	// error_throwError(ErrorType_ExprSyntaxError, error);
-
+	freeASTNode(curNode);
 	return NULL;
 }
 
@@ -517,6 +588,7 @@ static Token *__parseReduceExpr(Token *token,Token *terminal,ASTNode *preNode, A
 
 			if(!token){
 				// error_throwError(ErrorType_ExprSyntaxError, _token);
+				freeASTNode(curNode);
 				return NULL;
 			}
 
@@ -559,6 +631,7 @@ static Token *parseExpr(Token *token,Token *terminal,ASTNode *preNode, ASTNode *
 	token=__parseOpenExpr(token,terminal,&openNode);
 	if(!token){
 		// error_throwError(ErrorType_ExprSyntaxError, _token);
+		freeASTNode(openNode);
 		return NULL;
 	}
 
@@ -572,6 +645,10 @@ static Token *parseExpr(Token *token,Token *terminal,ASTNode *preNode, ASTNode *
 	token=__parseReduceExpr(token,terminal, openNode,&reduceNode);
 	if(!token){
 		// error_throwError(ErrorType_ExprSyntaxError, _token);
+
+		freeASTNode(openNode);
+		freeASTNode(reduceNode);
+
 		return NULL;
 	}
 
@@ -585,6 +662,11 @@ static Token *parseExpr(Token *token,Token *terminal,ASTNode *preNode, ASTNode *
 	token=__parseIncompleteExpr(token,terminal, reduceNode,&incometNode);
 	if(!token){
 		// error_throwError(ErrorType_ExprSyntaxError, _token);
+
+		freeASTNode(openNode);
+		freeASTNode(reduceNode);
+		freeASTNode(incometNode);
+
 		return NULL;
 	}
 
@@ -599,6 +681,12 @@ static Token *parseExpr(Token *token,Token *terminal,ASTNode *preNode, ASTNode *
 
 	if(!end){
 		// error_throwError(ErrorType_ExprSyntaxError, error);
+
+		freeASTNode(openNode);
+		freeASTNode(reduceNode);
+		freeASTNode(incometNode);
+		freeASTNode(*node);
+		*node=NULL;
 	}
 
 	return end;
@@ -620,6 +708,7 @@ static Token *parsePair(Token *token,Token *tail, ASTNode **node){
 		end=parseExpr(token, token->next, NULL, &keyNode);
 		if(!end){
 			// error_throwError(ErrorType_ExprSyntaxError, token);
+			freeASTNode(keyNode);
 			return NULL;
 		}
 
@@ -627,6 +716,10 @@ static Token *parsePair(Token *token,Token *tail, ASTNode **node){
 			end=parseExpr(token->next->next, tail, NULL,&valueNode);
 			if(!end){
 				error_throwError(ErrorType_ExprSyntaxError, token->next->next);
+
+				freeASTNode(keyNode);
+				freeASTNode(valueNode);
+
 				return NULL;
 			}
 
@@ -651,6 +744,10 @@ static Token *parsePair(Token *token,Token *tail, ASTNode **node){
 
 	// error_throwError(ErrorType_ExprSyntaxError, error);
 
+	freeASTNode(keyNode);
+	freeASTNode(valueNode);
+	freeASTNode(curNode);
+
 	return NULL;
 }
 
@@ -660,6 +757,8 @@ static Token *parseArgumentsExpr(Token *token,ASTNode **node){
 	end=__parseArguments(token,0,node);
 	if(!end){
 		// error_throwError(ErrorType_ExprSyntaxError, token);
+		freeASTNode(*node);
+		*node=NULL;
 	}
 
 	return end;
@@ -688,6 +787,10 @@ static Token *parseCall(Token *token,ASTNode *preNode,ASTNode **node){
 		end=parseArgumentsExpr(token, &argNode);
 		if(!end){
 			// error_throwError(ErrorType_ExprSyntaxError, token);
+
+			freeASTNode(curNode);
+			freeASTNode(argNode);
+
 			return NULL;
 		}
 
@@ -703,6 +806,9 @@ static Token *parseCall(Token *token,ASTNode *preNode,ASTNode **node){
 	}
 
 	// error_throwError(ErrorType_ExprSyntaxError, error);
+
+	freeASTNode(curNode);
+	freeASTNode(argNode);
 
 	return NULL;
 }
@@ -725,6 +831,10 @@ static Token *parseProperty(Token *token,ASTNode *preNode,ASTNode **node){
 			end=parseIdentifi(token->next,&propertyNode);
 			if(!end){
 				// error_throwError(ErrorType_ExprSyntaxError, token->next);
+
+				freeASTNode(curNode);
+				freeASTNode(propertyNode);
+
 				return NULL;
 			}
 
@@ -741,6 +851,9 @@ static Token *parseProperty(Token *token,ASTNode *preNode,ASTNode **node){
 	}
 
 	// error_throwError(ErrorType_ExprSyntaxError, error);
+
+	freeASTNode(curNode);
+	freeASTNode(propertyNode);
 
 	return NULL;
 }
@@ -770,6 +883,10 @@ static Token *parseSubscript(Token *token,ASTNode *preNode,ASTNode **node){
 		end=parseExpr(token->next, tail, NULL, &subNode);
 		if(!end){
 			// error_throwError(ErrorType_ExprSyntaxError, token->next);
+
+			freeASTNode(curNode);
+			freeASTNode(subNode);
+
 			return NULL;
 		}
 
@@ -786,6 +903,9 @@ static Token *parseSubscript(Token *token,ASTNode *preNode,ASTNode **node){
 	}
 
 	// error_throwError(ErrorType_ExprSyntaxError, error);
+
+	freeASTNode(curNode);
+	freeASTNode(subNode);
 
 	return NULL;
 }
@@ -956,6 +1076,10 @@ static Token *parsePrior(Token *token,ASTNode **node){
 		end=parseExpr(token->next,bound,NULL,&child);
 		if(!end){
 			// error_throwError(ErrorType_ExprSyntaxError, token->next);
+
+			freeASTNode(parent);
+			freeASTNode(child);
+
 			return NULL;
 		}
 
@@ -970,6 +1094,9 @@ static Token *parsePrior(Token *token,ASTNode **node){
 	}
 
 	// error_throwError(ErrorType_ExprSyntaxError, error);
+
+	freeASTNode(parent);
+	freeASTNode(child);
 
 	return NULL;
 }
@@ -1023,6 +1150,10 @@ static Token *parseMono(Token *token,Token *terminal,ASTNode **node){
 	token=__parseOpenExpr(bound->next,terminal,&leftNode);
 	if(!token){
 		// error_throwError(ErrorType_ExprSyntaxError, bound->next);
+
+		freeASTNode(curNode);
+		freeASTNode(leftNode);
+
 		return NULL;
 	}
 
@@ -1038,6 +1169,11 @@ static Token *parseMono(Token *token,Token *terminal,ASTNode **node){
 	token=__parseReduceExpr(token,terminal,leftNode,&rightNode);
 	if(!token){
 		// error_throwError(ErrorType_ExprSyntaxError, _token);
+
+		freeASTNode(curNode);
+		freeASTNode(leftNode);
+		freeASTNode(rightNode);
+
 		return NULL;
 	}
 
@@ -1191,6 +1327,9 @@ static Token *parseBlock(Token *start,Token *end,ASTNode **node){
 			token=parseState(token,&_cur);
 			if(!_cur){ // block失败
 
+				freeASTNode(blockNode);
+				freeASTNode(_cur);
+
 				break;
 			}
 			cur->next=_cur;
@@ -1203,6 +1342,8 @@ static Token *parseBlock(Token *start,Token *end,ASTNode **node){
 		end=end->next;
 		return end;
 	}
+
+	freeASTNode(blockNode);
 
 	return NULL;
 }
@@ -1222,6 +1363,10 @@ static Token *parseExprState(Token *token,ASTNode **node){
 		tail=parseExpr(token, end, NULL, node);
 		if(!tail){
 			error_throwError(ErrorType_ExprSyntaxError, token);
+
+			freeASTNode(*node);
+			*node=NULL;
+
 			return NULL;
 		}
 
@@ -1232,6 +1377,9 @@ static Token *parseExprState(Token *token,ASTNode **node){
 	}
 
 	error_throwError(ErrorType_ExprSyntaxError, error);
+
+	freeASTNode(*node);
+	*node=NULL;
 
 	return NULL;
 }
@@ -1265,6 +1413,7 @@ static Token *parseAssignState(Token *token,ASTNode **node){
 			token=__parseComma(token, aToken, 1, &leftNode);
 			if(!token){
 				error_throwError(ErrorType_AssignSyntaxError, _token);
+				freeASTNode(leftNode);
 				return NULL;
 			}
 
@@ -1274,6 +1423,10 @@ static Token *parseAssignState(Token *token,ASTNode **node){
 				token=__parseComma(token->next, end, 0, &rightNode);
 				if(!token){
 					error_throwError(ErrorType_AssignSyntaxError, _token);
+
+					freeASTNode(leftNode);
+					freeASTNode(rightNode);
+
 					return NULL;
 				}
 
@@ -1324,7 +1477,7 @@ static Token *parseAssignState(Token *token,ASTNode **node){
 					}
 					else{
 						error_throwError(ErrorType_AssignSyntaxError, aToken);
-						exit(0); // debug
+						freeASTNode(curNode);
 						return NULL;
 					}
 
@@ -1389,6 +1542,7 @@ static Token *parseIfState(Token *token,ASTNode **node){
 		start=parseExpr(start->next, end, NULL, &exprNode);
 		if(!start){
 			error_throwError(ErrorType_IfSyntaxError, _token);
+			freeASTNode(exprNode);
 			return NULL;
 		}
 
@@ -1397,12 +1551,17 @@ static Token *parseIfState(Token *token,ASTNode **node){
 			end=__boundBrace(start);
 			if(!end){
 				error_throwError(ErrorType_IfSyntaxError, start);
+				freeASTNode(exprNode);
 				return NULL;
 			}
 
 			end=parseBlock(start,end,&blockNode);
 			if(!end){
 				// error_throwError(ErrorType_ExprSyntaxError, start);
+
+				freeASTNode(exprNode);
+				freeASTNode(blockNode);
+
 				return NULL;
 			}
 
@@ -1437,12 +1596,20 @@ static Token *parseIfState(Token *token,ASTNode **node){
 				end=__boundBrace(start);
 				if(!end){
 					error_throwError(ErrorType_IfSyntaxError, start);
+
+					freeASTNode(exprNode);
+					freeASTNode(blockNode);
+
 					return NULL;
 				}
 
 				end=parseBlock(start,end,&blockNode);
 				if(!end){
 					// error_throwError(ErrorType_ExprSyntaxError, start);
+
+					freeASTNode(exprNode);
+					freeASTNode(blockNode);
+
 					return NULL;
 				}
 
@@ -1462,6 +1629,10 @@ static Token *parseIfState(Token *token,ASTNode **node){
 					end=__boundParenth(start);
 					if(!end){
 						error_throwError(ErrorType_IfSyntaxError, start);
+
+						freeASTNode(exprNode);
+						freeASTNode(blockNode);
+
 						return NULL;
 					}
 
@@ -1469,6 +1640,10 @@ static Token *parseIfState(Token *token,ASTNode **node){
 					start=parseExpr(start->next, end, NULL, &exprNode);
 					if(!start){
 						error_throwError(ErrorType_IfSyntaxError, _token);
+
+						freeASTNode(exprNode);
+						freeASTNode(blockNode);
+
 						return NULL;
 					}
 
@@ -1477,12 +1652,20 @@ static Token *parseIfState(Token *token,ASTNode **node){
 						end=__boundBrace(start);
 						if(!end){
 							error_throwError(ErrorType_IfSyntaxError, start);
+
+							freeASTNode(exprNode);
+							freeASTNode(blockNode);
+
 							return NULL;
 						}
 
 						end=parseBlock(start,end,&blockNode);
 						if(!end){
 							// error_throwError(ErrorType_ExprSyntaxError, start);
+
+							freeASTNode(exprNode);
+							freeASTNode(blockNode);
+
 							return NULL;
 						}
 
@@ -1512,6 +1695,11 @@ static Token *parseIfState(Token *token,ASTNode **node){
 			}
 			else{ // error
 				error_throwError(ErrorType_IfSyntaxError, start);
+
+				freeASTNode(exprNode);
+				freeASTNode(blockNode);
+				freeASTNode(ifNode);
+
 				return NULL;
 			}
 		}
@@ -1522,6 +1710,11 @@ static Token *parseIfState(Token *token,ASTNode **node){
 
 	if(!end||len!=blockLen){
 		error_throwError(ErrorType_IfSyntaxError, error);
+
+		freeASTNode(exprNode);
+		freeASTNode(blockNode);
+		freeASTNode(ifNode);
+
 		return NULL;
 	}
 	
@@ -2478,6 +2671,7 @@ static Token *parseImportState(Token *token,ASTNode **node){
 	end=parseExpr(token->next, end, NULL, &exprNode);
 	if(!end){
 		error_throwError(ErrorType_ImportSyntaxError, token->next);
+		freeASTNode(exprNode);
 		return NULL;
 	}
 
@@ -2499,7 +2693,7 @@ static Token *parseImportState(Token *token,ASTNode **node){
 	}
 
 	error_throwError(ErrorType_ImportSyntaxError, error);
-
+	freeASTNode(exprNode);
 	return NULL;
 }
 
@@ -2657,6 +2851,25 @@ static Token *parsePrintState(Token *token,ASTNode **node){
 
 	return end;
 }	
+
+void freeASTNode(ASTNode *node){
+
+	if(node){
+		free(node->data);
+		wrap_release(node->wrap);
+
+		for(int i=0;i<node->childLength;i++){
+			freeASTNode(node->childArr[i]);
+		}
+		free(node->childArr);
+
+		freeASTNode(node->next);
+
+		free(node);
+	}
+}
+
+
 
 
 

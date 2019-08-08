@@ -10,6 +10,7 @@ extern "C" {
 #include <string.h>
 #include "van_data.h"
 #include "van_lex.h"
+#include "van_error.h"
 
 typedef struct ASTNode{
 	ASTType type;
@@ -20,6 +21,7 @@ typedef struct ASTNode{
 		long long l;
 		double d;
 	} value; // int/float 
+
 	char *data; // indentify/string 
 	VanWrap *wrap;
 
@@ -37,6 +39,8 @@ typedef struct ASTNode{
 
 int parseToken(Token *token,ASTNode **node);
 
+void freeASTNode(ASTNode *node);
+void debugASTNode(ASTNode *node);
 
 
 #ifdef __cplusplus
