@@ -1,5 +1,5 @@
 
-#include "van_lex.h"
+#include "van_error.h"
 
 
 ErrorInfor __van_errorInfor;

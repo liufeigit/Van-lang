@@ -10,6 +10,7 @@ extern "C" {
 #include <string.h>
 #include "van_data.h"
 #include "van_lex.h"
+#include "van_error.h"
 
 typedef struct ASTNode{
 	ASTType type;
