@@ -66,7 +66,7 @@ ____    ____  ___      .__   __.
 
 If you have good ideas and suggestions,contact me , welcome to improve and transform `Van` language.
 
-email: [woaicplusplus@gmail.com](mailto:woaicplusplus@gmail.com)
+<!-- email: [woaicplusplus@gmail.com](mailto:woaicplusplus@gmail.com) -->
 
 ## Contributing
 * <a href="https://github.com/liufeigit/Van-lang/issues/new">Open an issue</a>:
